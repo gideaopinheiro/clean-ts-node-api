@@ -15,14 +15,15 @@ describe('SignUp Routes', () => {
   afterAll(async () => {
     await MongoHelper.disconnect()
   })
+
   test('Should return an account on success', async () => {
     await request(app)
       .post('/api/signup')
       .send({
-        name: 'Gideao',
-        email: 'gpss@ic.ufal.br',
-        password: '123',
-        passwordConfirmation: '123'
+        name: 'any_name',
+        email: 'any_email@mail.com',
+        password: 'any_password',
+        passwordConfirmation: 'any_password'
       })
       .expect(200)
   })
