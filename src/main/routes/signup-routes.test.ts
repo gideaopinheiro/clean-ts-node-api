@@ -1,6 +1,7 @@
 import request from 'supertest'
 import app from '../config/app'
 import { MongoHelper } from '../../infra/db/mongodb/helpers/mongo-helper'
+import { ok } from '../../presentation/helpers/http-helper'
 
 describe('SignUp Routes', () => {
   beforeAll(async () => {
@@ -25,6 +26,6 @@ describe('SignUp Routes', () => {
         password: 'any_password',
         passwordConfirmation: 'any_password'
       })
-      .expect(200)
+      .expect(ok)
   })
 })
