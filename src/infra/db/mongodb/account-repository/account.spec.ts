@@ -1,6 +1,12 @@
 import { AccountMongoRepository } from './account'
 import { MongoHelper } from '../helpers/mongo-helper'
 
+const makeFakeAccount = (): any => ({
+  name: 'any_name',
+  email: 'any_email@mail.com',
+  password: 'any_password'
+})
+
 describe('Account Mongo Repository', () => {
   beforeAll(async () => {
     await MongoHelper.connect(process.env.MONGO_URL)
@@ -19,14 +25,20 @@ describe('Account Mongo Repository', () => {
     return new AccountMongoRepository()
   }
 
-  test('Should return account on success', async () => {
+  test('Should return account on add success', async () => {
     const sut = makeSut()
-    const accountData = {
-      name: 'any_name',
-      email: 'any_email@mail.com',
-      password: 'any_password'
-    }
-    const account = await sut.add(accountData)
+    const account = await sut.add(makeFakeAccount())
+    expect(account).toBeTruthy()
+    expect(account.id).toBeTruthy()
+    expect(account.name).toBe('any_name')
+    expect(account.email).toBe('any_email@mail.com')
+    expect(account.password).toBe('any_password')
+  })
+
+  test('Should return an account on loadByEmail success', async () => {
+    const sut = makeSut()
+    await sut.add(makeFakeAccount())
+    const account = await sut.loadByEmail('any_email@mail.com')
     expect(account).toBeTruthy()
     expect(account.id).toBeTruthy()
     expect(account.name).toBe('any_name')
