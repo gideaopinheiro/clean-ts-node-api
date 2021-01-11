@@ -1,0 +1,11 @@
+import { SignUpController } from '../../../../../presentation/controllers/login/signup/signup-controller'
+import { Controller } from '../../../../../presentation/protocols'
+import { makeDbAuthentication } from '../../../usecases/survey/add-survey/authentication/db-authentication-factory'
+import { makeDbAddAccount } from '../../../usecases/account/add-account/db-add-account-factory'
+import { makeLogControllerDecorator } from '../../../usecases/decorator/log-controller-decorator-factory'
+import { makeSignUpValidation } from './signup-validation-factory'
+
+export const makeSignUpController = (): Controller => {
+  const signUpController = new SignUpController(makeDbAddAccount(), makeSignUpValidation(), makeDbAuthentication())
+  return makeLogControllerDecorator(signUpController)
+}
