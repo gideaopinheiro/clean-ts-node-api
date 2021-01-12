@@ -35,10 +35,12 @@ describe('Survey Mongo Repository', () => {
     await MongoHelper.disconnect()
   })
 
-  test('Should add a survey on success', async () => {
-    const sut = makeSut()
-    await sut.add(makeFakeAddSurvey())
-    const survey = await surveyCollection.findOne({ question: 'any_question' })
-    expect(survey).toBeTruthy()
+  describe('add()', () => {
+    test('Should add a survey on success', async () => {
+      const sut = makeSut()
+      await sut.add(makeFakeAddSurvey())
+      const survey = await surveyCollection.findOne({ question: 'any_question' })
+      expect(survey).toBeTruthy()
+    })
   })
 })
