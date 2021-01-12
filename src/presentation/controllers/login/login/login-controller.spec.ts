@@ -29,7 +29,7 @@ const makeAuthenticaton = (): Authentication => {
   return new AuthenticationStub()
 }
 
-interface SutTypes {
+type SutTypes = {
   sut: LoginController
   authenticationStub: Authentication
   validationStub: Validation
