@@ -44,7 +44,7 @@ describe('Survey Mongo Repository', () => {
     })
   })
 
-  describe('load()', () => {
+  describe('loadAll()', () => {
     test('Should return all surveys on success', async () => {
       await surveyCollection.insertMany([
         {
@@ -73,6 +73,7 @@ describe('Survey Mongo Repository', () => {
       const sut = makeSut()
       const surveys = await sut.load()
       expect(surveys.length).toBe(2)
+      expect(surveys[0].id).toBeTruthy()
       expect(surveys[0].question).toEqual('any_question')
       expect(surveys[1].question).toEqual('any_question2')
     })
@@ -101,6 +102,7 @@ describe('Survey Mongo Repository', () => {
       const sut = makeSut()
       const survey = await sut.loadById(id)
       expect(survey).toBeTruthy()
+      expect(survey.id).toBeTruthy()
     })
   })
 })
