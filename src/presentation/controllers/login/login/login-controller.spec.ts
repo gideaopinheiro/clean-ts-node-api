@@ -2,7 +2,7 @@ import { MissingParamError } from '@/presentation/errors'
 import { badRequest, serverError, unauthorized, ok } from '@/presentation/helpers/http/http-helper'
 import { HttpRequest, Authentication, Validation } from './login-controller-protocols'
 import { LoginController } from './login-controller'
-import { AuthenticationModel } from '@/domain/usecases/authentication'
+import { AuthenticationModel } from '@/domain/usecases/account/authentication'
 
 const makeValidation = (): Validation => {
   class ValidationStub implements Validation {
