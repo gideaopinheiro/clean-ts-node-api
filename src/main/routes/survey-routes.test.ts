@@ -77,7 +77,7 @@ describe('Survey Routes', () => {
     })
   })
 
-  describe('POST /surveys', () => {
+  describe('GET /surveys', () => {
     test('Should return 403 on load surveys if no access token is provided', async () => {
       await request(app)
         .get('/api/surveys')

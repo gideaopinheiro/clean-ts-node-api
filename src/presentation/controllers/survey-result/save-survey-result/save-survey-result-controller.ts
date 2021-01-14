@@ -22,6 +22,7 @@ export class SaveSurveyResultController implements Controller {
       } else {
         return forbidden(new InvalidParamError('surveyId'))
       }
+      console.log('ok---')
       const surveyResult = await this.saveSurveyResult.save({
         accountId,
         surveyId,
@@ -30,6 +31,7 @@ export class SaveSurveyResultController implements Controller {
       })
       return ok(surveyResult)
     } catch (error) {
+      console.error(error)
       return serverError(error)
     }
   }
