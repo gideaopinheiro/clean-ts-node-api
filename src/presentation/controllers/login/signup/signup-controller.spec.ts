@@ -1,9 +1,9 @@
 import { MissingParamError, ServerError, EmailAlreadyInUseError } from '@/presentation/errors'
-import { EmailValidator, AccountModel, AddAccount, AddAccountModel, Validation } from './signup-controller-protocols'
+import { EmailValidator, AccountModel, AddAccount, AddAccountParams, Validation } from './signup-controller-protocols'
 import { SignUpController } from './signup-controller'
 import { HttpRequest } from '@/presentation/protocols'
 import { ok, serverError, badRequest, forbidden } from '@/presentation/helpers/http/http-helper'
-import { Authentication, AuthenticationModel } from '../login/login-controller-protocols'
+import { Authentication, AuthenticationParams } from '../login/login-controller-protocols'
 
 type SutTypes = {
   sut: SignUpController
@@ -40,7 +40,7 @@ const makeEmailValidator = (): EmailValidator => {
 
 const makeAddAccount = (): AddAccount => {
   class AddAccountStub implements AddAccount {
-    async add (account: AddAccountModel): Promise<AccountModel> {
+    async add (account: AddAccountParams): Promise<AccountModel> {
       return new Promise(resolve => resolve(makeFakeAccount()))
     }
   }
@@ -58,7 +58,7 @@ const makeValidation = (): Validation => {
 
 const makeAuthenticationStub = (): Authentication => {
   class AuthenticationStub implements Authentication {
-    async auth (authentication: AuthenticationModel): Promise<string> {
+    async auth (authentication: AuthenticationParams): Promise<string> {
       return 'any_token'
     }
   }
