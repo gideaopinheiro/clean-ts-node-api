@@ -6,6 +6,10 @@ import { SurveyModel } from '@/domain/models/survey'
 import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
 import { SurveyResultMongoRepository } from './survey-result-mongo-repository'
 
+let surveyCollection: Collection
+let surveyResultCollection: Collection
+let accountCollection: Collection
+
 const mockSurvey = async (): Promise<SurveyModel> => {
   const res = await surveyCollection.insertOne({
     question: 'any_question',
@@ -35,10 +39,6 @@ const mockAccount = async (): Promise<AccountModel> => {
 const mockSut = (): SaveSurveyResultRepository => {
   return new SurveyResultMongoRepository()
 }
-
-let surveyCollection: Collection
-let surveyResultCollection: Collection
-let accountCollection: Collection
 
 describe('Survey Result Mongo Repository', () => {
   beforeAll(async () => {
@@ -72,10 +72,11 @@ describe('Survey Result Mongo Repository', () => {
         date: new Date()
       })
       expect(surveyResult).toBeTruthy()
-      expect(surveyResult.surveyId).toEqual(survey.id)
-      expect(surveyResult.answers[0].answer).toBe(survey.answers[0].answer)
       expect(surveyResult.answers[0].count).toBe(1)
       expect(surveyResult.answers[0].percent).toBe(100)
+      expect(surveyResult.answers[0].answer).toBe(survey.answers[0].answer)
+      expect(surveyResult.answers[1].count).toBe(0)
+      expect(surveyResult.answers[1].percent).toBe(0)
     })
 
     test('Should update the survey result if its not new', async () => {
@@ -89,9 +90,11 @@ describe('Survey Result Mongo Repository', () => {
         date: new Date()
       })
       expect(surveyResult).toBeTruthy()
-      expect(surveyResult.surveyId).toEqual(survey.id)
       expect(surveyResult.answers[0].count).toBe(1)
       expect(surveyResult.answers[0].percent).toBe(100)
+      expect(surveyResult.answers[0].answer).toBe(survey.answers[1].answer)
+      expect(surveyResult.answers[1].count).toBe(0)
+      expect(surveyResult.answers[1].percent).toBe(0)
     })
   })
 })
