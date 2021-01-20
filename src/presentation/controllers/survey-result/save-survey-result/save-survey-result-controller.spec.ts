@@ -32,11 +32,10 @@ const makeFakeSurvey = (): SurveyModel => (
 )
 
 const makeFakeSurveyResult = (): SurveyResultModel => ({
-  id: 'any_id',
   surveyId: 'any_survey_id',
-  accountId: 'any_account_id',
-  date: new Date(),
-  answer: 'any_answer'
+  question: 'any_question',
+  answers: [],
+  date: new Date()
 })
 
 const makeSaveSurveyResult = (): SaveSurveyResult => {
