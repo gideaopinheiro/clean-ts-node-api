@@ -2,7 +2,7 @@ import { SurveyModel } from '@/domain/models/survey'
 
 export const mockSurvey = (): SurveyModel => {
   return {
-    id: 'any_id',
+    id: 'any_survey_id',
     question: 'any_question',
     answers: [
       {
@@ -10,7 +10,7 @@ export const mockSurvey = (): SurveyModel => {
         answer: 'any_answer'
       },
       {
-        answer: 'any_answer2'
+        answer: 'other_answer'
       }
     ],
     date: new Date()
@@ -20,7 +20,7 @@ export const mockSurvey = (): SurveyModel => {
 export const mockSurveyList = (): SurveyModel[] => {
   return [
     {
-      id: 'any_id',
+      id: 'any_survey_id',
       question: 'any_question',
       answers: [
         {
