@@ -38,7 +38,7 @@ const mockAccount = async (): Promise<AccountModel> => {
   return account.ops[0]
 }
 
-const mockSut = (): SurveyResultMongoRepository => {
+const makeSut = (): SurveyResultMongoRepository => {
   return new SurveyResultMongoRepository()
 }
 
@@ -66,7 +66,7 @@ describe('Survey Result Mongo Repository', () => {
     test('Should add a survey if its new', async () => {
       const survey = await mockSurvey()
       const account = await mockAccount()
-      const sut = mockSut()
+      const sut = makeSut()
       await sut.save({
         surveyId: survey.id,
         accountId: account.id,
@@ -89,7 +89,7 @@ describe('Survey Result Mongo Repository', () => {
         answer: survey.answers[0].answer,
         date: new Date()
       })
-      const sut = mockSut()
+      const sut = makeSut()
       await sut.save({
         surveyId: survey.id,
         accountId: account.id,
@@ -130,7 +130,7 @@ describe('Survey Result Mongo Repository', () => {
         answer: survey.answers[1].answer,
         date: new Date()
       }])
-      const sut = mockSut()
+      const sut = makeSut()
       const surveyResult = await sut.loadBySurveyId(survey.id)
       expect(surveyResult).toBeTruthy()
       expect(surveyResult.answers[0].count).toBe(2)
