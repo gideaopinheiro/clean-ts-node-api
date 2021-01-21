@@ -1,4 +1,5 @@
-import { mockSaveSurveyResultRepository } from '@/data/test'
+import { LoadSurveyResultRepository } from '@/data/protocols/db/survey-result/load-survey-result-repository'
+import { mockLoadSurveyResultRepository, mockSaveSurveyResultRepository } from '@/data/test'
 import { mockSurveyResult, mockSurveyResultData } from '@/domain/test'
 import MockDate from 'mockdate'
 import { DbSaveSurveyResult } from './db-save-survey-result'
@@ -7,16 +8,20 @@ import { SaveSurveyResultRepository } from './db-save-survey-result-protocols'
 type SutTypes = {
   sut: DbSaveSurveyResult
   saveSurveyResultRepositoryStub: SaveSurveyResultRepository
+  loadSurveyResultRepositoryStub: LoadSurveyResultRepository
 }
 
 const makeSut = (): SutTypes => {
   const saveSurveyResultRepositoryStub = mockSaveSurveyResultRepository()
-  const sut = new DbSaveSurveyResult(saveSurveyResultRepositoryStub)
+  const loadSurveyResultRepositoryStub = mockLoadSurveyResultRepository()
+  const sut = new DbSaveSurveyResult(saveSurveyResultRepositoryStub, loadSurveyResultRepositoryStub)
   return {
     sut,
-    saveSurveyResultRepositoryStub
+    saveSurveyResultRepositoryStub,
+    loadSurveyResultRepositoryStub
   }
 }
+
 describe('DbSaveSurveyResult usecase', () => {
   beforeAll(() => {
     MockDate.set(new Date())
@@ -38,6 +43,13 @@ describe('DbSaveSurveyResult usecase', () => {
     jest.spyOn(saveSurveyResultRepositoryStub, 'save').mockReturnValueOnce(Promise.reject(new Error()))
     const promise = sut.save(mockSurveyResultData())
     await expect(promise).rejects.toThrow()
+  })
+
+  test('Should call if LoadSurveyResultRepository with correct values', async () => {
+    const { sut, loadSurveyResultRepositoryStub } = makeSut()
+    const loadBySurveyIdSpy = jest.spyOn(loadSurveyResultRepositoryStub, 'loadBySurveyId')
+    await sut.save(mockSurveyResultData())
+    expect(loadBySurveyIdSpy).toHaveBeenCalledWith(mockSurveyResultData().surveyId)
   })
 
   test('Should return an survey result if SaveSurveyResultRepository succeeds', async () => {
