@@ -5,7 +5,7 @@ import { InvalidParamError } from '@/presentation/errors'
 import { forbidden, ok, serverError } from '@/presentation/helpers/http/http-helper'
 import { HttpRequest } from '@/presentation/protocols'
 import { mockLoadSurveyById, mockLoadSurveyResult } from '@/presentation/test'
-import { mockSurveyResult } from '../../../../domain/test'
+import { mockSurveyResult } from '@/domain/test'
 
 const mockRequest = (): HttpRequest => ({
   params: {
