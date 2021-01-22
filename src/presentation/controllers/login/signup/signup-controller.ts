@@ -1,6 +1,6 @@
 import { EmailAlreadyInUseError } from '@/presentation/errors'
-import { badRequest, forbidden, ok, serverError, unauthorized } from '@/presentation/helpers/http/http-helper'
-import { AddAccount, Controller, HttpRequest, HttpResponse, Validation, Authentication } from './signup-controller-protocols'
+import { badRequest, forbidden, ok, serverError } from '@/presentation/helpers/http/http-helper'
+import { AddAccount, Authentication, Controller, HttpRequest, HttpResponse, Validation } from './signup-controller-protocols'
 
 export class SignUpController implements Controller {
   constructor (
@@ -25,9 +25,6 @@ export class SignUpController implements Controller {
         return forbidden(new EmailAlreadyInUseError())
       }
       const accessToken = await this.authentication.auth({ email, password })
-      if (!accessToken) {
-        return unauthorized()
-      }
       return ok({ accessToken })
     } catch (error) {
       return serverError(error)
