@@ -1,8 +1,9 @@
 import { InvalidParamError } from '@/presentation/errors'
 import { forbidden, ok, serverError } from '@/presentation/helpers/http/http-helper'
+import { mockLoadSurveyById } from '@/presentation/test'
 import MockDate from 'mockdate'
 import { SaveSurveyResultController } from './save-survey-result-controller'
-import { Controller, HttpRequest, LoadSurveyById, SaveSurveyResult, SaveSurveyResultModel, SurveyModel, SurveyResultModel } from './save-survey-result-controller-protocols'
+import { Controller, HttpRequest, LoadSurveyById, SaveSurveyResult, SaveSurveyResultModel, SurveyResultModel } from './save-survey-result-controller-protocols'
 
 const makeFakeRequest = (): HttpRequest => ({
   params: {
@@ -13,23 +14,6 @@ const makeFakeRequest = (): HttpRequest => ({
   },
   accountId: 'any_account_id'
 })
-
-const makeFakeSurvey = (): SurveyModel => (
-  {
-    id: 'any_id',
-    question: 'any_question',
-    answers: [
-      {
-        image: 'any_image',
-        answer: 'any_answer'
-      },
-      {
-        answer: 'any_answer2'
-      }
-    ],
-    date: new Date()
-  }
-)
 
 const makeFakeSurveyResult = (): SurveyResultModel => ({
   surveyId: 'any_survey_id',
@@ -47,15 +31,6 @@ const makeSaveSurveyResult = (): SaveSurveyResult => {
   return new SaveSurveyResultStub()
 }
 
-const makeLoadSurveyById = (): LoadSurveyById => {
-  class LoadSurveyByIdStub implements LoadSurveyById {
-    async loadById (id: string): Promise<SurveyModel> {
-      return Promise.resolve(makeFakeSurvey())
-    }
-  }
-  return new LoadSurveyByIdStub()
-}
-
 type SutTypes = {
   sut: Controller
   loadSurveyByIdStub: LoadSurveyById
@@ -63,7 +38,7 @@ type SutTypes = {
 }
 
 const makeSut = (): SutTypes => {
-  const loadSurveyByIdStub = makeLoadSurveyById()
+  const loadSurveyByIdStub = mockLoadSurveyById()
   const saveSurveyResultStub = makeSaveSurveyResult()
   const sut = new SaveSurveyResultController(loadSurveyByIdStub, saveSurveyResultStub)
   return {
