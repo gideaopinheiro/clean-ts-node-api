@@ -2,8 +2,8 @@ import { LoadSurveyResultRepository, SaveSurveyResultRepository } from '@/data/p
 import { SurveyResultModel } from '@/domain/models'
 import { SaveSurveyResultModel } from '@/domain/usecases/survey-result'
 import { ObjectId } from 'mongodb'
-import { MongoHelper } from '../helpers/mongo-helper'
-import { QueryBuilder } from '../helpers/query-builder'
+import { MongoHelper } from './mongo-helper'
+import { QueryBuilder } from './query-builder'
 
 export class SurveyResultMongoRepository implements SaveSurveyResultRepository, LoadSurveyResultRepository {
   async save (data: SaveSurveyResultModel): Promise<void> {
