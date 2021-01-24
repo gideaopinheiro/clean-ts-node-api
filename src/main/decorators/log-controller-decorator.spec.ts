@@ -2,7 +2,7 @@ import { LogErrorRepository } from '@/data/protocols/db/log/log-error-repository
 import { ok, serverError } from '@/presentation/helpers/http/http-helper'
 import { Controller, HttpRequest, HttpResponse } from '@/presentation/protocols'
 import { LogControllerDecorator } from './log-controller-decorator'
-import { mockLogErrorRepository } from '@/data/test'
+import { mockLogErrorRepository } from '@/../tests/data/mocks'
 
 const mockController = (): Controller => {
   class ControllerStub implements Controller {

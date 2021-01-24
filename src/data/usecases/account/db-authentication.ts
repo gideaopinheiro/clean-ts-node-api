@@ -1,11 +1,10 @@
 import {
   AuthenticationParams,
-  HashComparer,
-  Encrypter,
   LoadAccountByEmailRepository,
   UpdateAccessTokenRepository,
   Authentication
 } from './db-authentication-protocols'
+import { HashComparer, Encrypter } from '@/data/protocols/criptography'
 
 export class DbAuthentication implements Authentication {
   constructor (
