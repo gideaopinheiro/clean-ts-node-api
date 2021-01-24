@@ -1,8 +1,10 @@
 import { AccessDeniedError } from '../errors'
 import { forbidden, ok, serverError } from '../helpers/http/http-helper'
 import { AuthMiddleware } from './auth-middleware'
-import { AccountModel, HttpRequest, LoadAccountByToken } from './auth-middleware-protocols'
-import { mockAccountModel } from '@/domain/test'
+import { HttpRequest } from './auth-middleware-protocols'
+import { LoadAccountByToken } from '@/domain/usecases/account'
+import { AccountModel } from '@/domain/models'
+import { mockAccountModel } from '@/tests/domain/mocks'
 
 const makeFakeRequest = (): HttpRequest => ({
   headers: {

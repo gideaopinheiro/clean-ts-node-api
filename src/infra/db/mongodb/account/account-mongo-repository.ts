@@ -1,5 +1,5 @@
 import { AddAccountParams } from '@/domain/usecases/account/add-account'
-import { AccountModel } from '@/domain/models/account'
+import { AccountModel } from '@/domain/models'
 import { MongoHelper } from '../helpers/mongo-helper'
 import { AddAccountRepository, LoadAccountByEmailRepository, UpdateAccessTokenRepository, LoadAccountByTokenRepository } from '@/data/protocols/db/account'
 

@@ -1,6 +1,8 @@
 import { InvalidParamError } from '@/presentation/errors'
 import { forbidden, ok, serverError } from '@/presentation/helpers/http/http-helper'
-import { Controller, HttpRequest, HttpResponse, LoadSurveyById, SaveSurveyResult } from './save-survey-result-controller-protocols'
+import { Controller, HttpRequest, HttpResponse } from './save-survey-result-controller-protocols'
+import { SaveSurveyResult } from '@/domain/usecases/survey-result'
+import { LoadSurveyById } from '@/domain/usecases/survey'
 
 export class SaveSurveyResultController implements Controller {
   constructor (

@@ -3,7 +3,10 @@ import { forbidden, ok, serverError } from '@/presentation/helpers/http/http-hel
 import { mockLoadSurveyById } from '@/presentation/test'
 import MockDate from 'mockdate'
 import { SaveSurveyResultController } from './save-survey-result-controller'
-import { Controller, HttpRequest, LoadSurveyById, SaveSurveyResult, SaveSurveyResultModel, SurveyResultModel } from './save-survey-result-controller-protocols'
+import { Controller, HttpRequest } from './save-survey-result-controller-protocols'
+import { SaveSurveyResult, SaveSurveyResultModel } from '@/domain/usecases/survey-result'
+import { LoadSurveyById } from '@/domain/usecases/survey'
+import { SurveyResultModel } from '@/domain/models'
 
 const makeFakeRequest = (): HttpRequest => ({
   params: {

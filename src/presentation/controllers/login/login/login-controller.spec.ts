@@ -1,6 +1,7 @@
 import { MissingParamError } from '@/presentation/errors'
 import { badRequest, serverError, unauthorized, ok } from '@/presentation/helpers/http/http-helper'
-import { HttpRequest, Authentication, Validation } from './login-controller-protocols'
+import { HttpRequest, Validation } from './login-controller-protocols'
+import { Authentication } from '@/domain/usecases/account'
 import { LoginController } from './login-controller'
 import { AuthenticationParams } from '@/domain/usecases/account/authentication'
 

@@ -1,5 +1,4 @@
-import { AccountModel } from '@/domain/models/account'
-import { SurveyModel } from '@/domain/models/survey'
+import { AccountModel, SurveyModel } from '@/domain/models'
 import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
 import MockDate from 'mockdate'
 import { Collection, ObjectId } from 'mongodb'

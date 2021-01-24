@@ -1,5 +1,5 @@
-import { SurveyResultModel } from '@/domain/models/survey-result'
-import { LoadSurveyResult } from '@/domain/usecases/survey-result/load-survey-result'
+import { SurveyResultModel } from '@/domain/models'
+import { LoadSurveyResult } from '@/domain/usecases/survey-result'
 import { LoadSurveyResultRepository } from '@/data/protocols/db/survey-result'
 import { LoadSurveyByIdRepository } from '@/data/protocols/db/survey'
 

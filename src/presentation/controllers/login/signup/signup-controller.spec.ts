@@ -1,10 +1,11 @@
-import { MissingParamError, ServerError, EmailAlreadyInUseError } from '@/presentation/errors'
-import { EmailValidator, AccountModel, AddAccount, AddAccountParams, Validation } from './signup-controller-protocols'
-import { SignUpController } from './signup-controller'
+import { AccountModel } from '@/domain/models'
+import { AddAccount, Authentication, AuthenticationParams } from '@/domain/usecases/account'
+import { EmailAlreadyInUseError, MissingParamError, ServerError } from '@/presentation/errors'
+import { badRequest, forbidden, ok, serverError } from '@/presentation/helpers/http/http-helper'
 import { HttpRequest } from '@/presentation/protocols'
-import { ok, serverError, badRequest, forbidden } from '@/presentation/helpers/http/http-helper'
-import { Authentication, AuthenticationParams } from '../login/login-controller-protocols'
-import { mockAccountModel } from '@/domain/test'
+import { mockAccountModel } from '@/tests/domain/mocks'
+import { SignUpController } from './signup-controller'
+import { AddAccountParams, EmailValidator, Validation } from './signup-controller-protocols'
 
 type SutTypes = {
   sut: SignUpController
