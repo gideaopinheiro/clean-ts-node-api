@@ -1,4 +1,4 @@
-import { LoginController } from '@/presentation/controllers/login/login/login-controller'
+import { LoginController } from '@/presentation/controllers/login/login-controller'
 import { Controller } from '@/presentation/protocols'
 import { makeDbAuthentication } from '@/main/factories/usecases/survey/add-survey/authentication/db-authentication-factory'
 import { makeLogControllerDecorator } from '@/main/factories/usecases/decorator/log-controller-decorator-factory'

@@ -1,7 +1,7 @@
-import { Controller } from './load-survey-controller-protocols'
+import { Controller } from '@/presentation/protocols'
 import { LoadSurveys } from '@/domain/usecases/survey'
 import { SurveyModel } from '@/domain/models'
-import { LoadSurveysController } from './load-surveys-controller'
+import { LoadSurveysController } from '@/presentation/controllers/survey/load-surveys-controller'
 import MockDate from 'mockdate'
 import { noContent, ok, serverError } from '@/presentation/helpers/http/http-helper'
 
