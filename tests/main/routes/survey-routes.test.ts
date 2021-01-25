@@ -127,7 +127,8 @@ describe('Survey Routes', () => {
       await request(app)
         .get('/api/surveys')
         .set('x-access-token', accessToken)
-        .send({}).expect(200)
+        .send({})
+        .expect(200)
     })
 
     test('Should return 204 on load surveys when there are no surveys', async () => {
