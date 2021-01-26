@@ -1,9 +1,10 @@
-import { MissingParamError } from '@/presentation/errors'
-import { badRequest, serverError, unauthorized, ok } from '@/presentation/helpers/http/http-helper'
-import { HttpRequest, Validation } from '@/presentation/protocols'
 import { Authentication } from '@/domain/usecases/account'
-import { LoginController } from '@/presentation/controllers/login/login-controller'
 import { AuthenticationParams } from '@/domain/usecases/account/authentication'
+import { LoginController } from '@/presentation/controllers/login/login-controller'
+import { MissingParamError } from '@/presentation/errors'
+import { badRequest, ok, serverError, unauthorized } from '@/presentation/helpers/http/http-helper'
+import { Validation } from '@/presentation/protocols'
+import { AuthenticationModel } from '../../../domain/models/authentication'
 
 const makeValidation = (): Validation => {
   class ValidationStub implements Validation {
@@ -14,17 +15,15 @@ const makeValidation = (): Validation => {
   return new ValidationStub()
 }
 
-const makeFakeRequest = (): HttpRequest => ({
-  body: {
-    email: 'any_email@mail.com',
-    password: 'any_password'
-  }
+const makeFakeRequest = (): LoginController.Request => ({
+  email: 'any_email@mail.com',
+  password: 'any_password'
 })
 
 const makeAuthenticaton = (): Authentication => {
   class AuthenticationStub implements Authentication {
-    async auth (authentication: AuthenticationParams): Promise<string> {
-      return Promise.resolve('any_token')
+    async auth (authentication: AuthenticationParams): Promise<AuthenticationModel> {
+      return Promise.resolve({ accessToken: 'any_token', name: 'any_name' })
     }
   }
   return new AuthenticationStub()
@@ -75,7 +74,7 @@ describe('LoginController', () => {
   test('Should return 200 if valid credentials are provided', async () => {
     const { sut } = makeSut()
     const httpResponse = await sut.handle(makeFakeRequest())
-    expect(httpResponse).toEqual(ok({ accessToken: 'any_token' }))
+    expect(httpResponse).toEqual(ok({ authenticationModel: { name: 'any_name', accessToken: 'any_token' } }))
   })
 
   test('Should call Validation with correct values', async () => {
@@ -83,7 +82,7 @@ describe('LoginController', () => {
     const validateSpy = jest.spyOn(validationStub, 'validate')
     const httpRequest = makeFakeRequest()
     await sut.handle(httpRequest)
-    expect(validateSpy).toHaveBeenCalledWith(httpRequest.body)
+    expect(validateSpy).toHaveBeenCalledWith({ email: 'any_email@mail.com', password: 'any_password' })
   })
 
   test('Should return 400 if Validator throws', async () => {

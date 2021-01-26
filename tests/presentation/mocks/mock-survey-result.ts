@@ -5,8 +5,14 @@ import { LoadSurveyResult } from '@/domain/usecases/survey-result'
 
 export const mockLoadSurveyResult = (): LoadSurveyResult => {
   class LoadSurveyResultStub implements LoadSurveyResult {
-    async load (surveyId: string): Promise<SurveyResultModel> {
-      return Promise.resolve(mockSurveyResult())
+    surveyResultModel = mockSurveyResult()
+    surveyId: string
+    accountId: string
+
+    async load (surveyId: string, accountId: string): Promise<SurveyResultModel> {
+      this.surveyId = surveyId
+      this.accountId = accountId
+      return this.surveyResultModel
     }
   }
   return new LoadSurveyResultStub()

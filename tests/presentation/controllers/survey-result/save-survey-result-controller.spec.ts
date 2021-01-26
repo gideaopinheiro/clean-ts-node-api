@@ -1,20 +1,16 @@
+import { SurveyResultModel } from '@/domain/models'
+import { LoadSurveyById } from '@/domain/usecases/survey'
+import { SaveSurveyResult, SaveSurveyResultModel } from '@/domain/usecases/survey-result'
+import { SaveSurveyResultController } from '@/presentation/controllers/survey-result/save-survey-result-controller'
 import { InvalidParamError } from '@/presentation/errors'
 import { forbidden, ok, serverError } from '@/presentation/helpers/http/http-helper'
-import { mockLoadSurveyById } from '../../mocks/mock-survey-result'
+import { Controller } from '@/presentation/protocols'
 import MockDate from 'mockdate'
-import { SaveSurveyResultController } from '@/presentation/controllers/survey-result/save-survey-result-controller'
-import { Controller, HttpRequest } from '@/presentation/protocols'
-import { SaveSurveyResult, SaveSurveyResultModel } from '@/domain/usecases/survey-result'
-import { LoadSurveyById } from '@/domain/usecases/survey'
-import { SurveyResultModel } from '@/domain/models'
+import { mockLoadSurveyById } from '../../mocks/mock-survey-result'
 
-const makeFakeRequest = (): HttpRequest => ({
-  params: {
-    surveyId: 'any_id'
-  },
-  body: {
-    answer: 'any_answer'
-  },
+const makeFakeRequest = (): any => ({
+  surveyId: 'any_id',
+  answer: 'any_answer',
   accountId: 'any_account_id'
 })
 
@@ -84,12 +80,8 @@ describe('SaveSurveyResult Controller', () => {
   test('Should return 403 if invalid answer is provided', async () => {
     const { sut } = makeSut()
     const httpResponse = await sut.handle({
-      params: {
-        surveyId: 'any_id'
-      },
-      body: {
-        answer: 'wrong_answer'
-      }
+      surveyId: 'any_id',
+      answer: 'wrong_answer'
     })
     expect(httpResponse).toEqual(forbidden(new InvalidParamError('answer')))
   })

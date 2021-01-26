@@ -1,8 +1,14 @@
+import { AddSurvey } from '@/domain/usecases/survey'
 import { MongoHelper, SurveyMongoRepository } from '@/infra/db/mongodb'
 import { Collection } from 'mongodb'
-import { AddSurveyParams } from '@/domain/usecases/survey'
+import { mockAddAccountParams } from '@/tests/domain/mocks'
+import { AccountModel } from '@/domain/models'
 
-const makeFakeAddSurvey = (): AddSurveyParams => ({
+let surveyCollection: Collection
+let surveyResultCollection: Collection
+let accountCollection: Collection
+
+const makeFakeAddSurvey = (): AddSurvey.Params => ({
   question: 'any_question',
   answers: [{
     image: 'any_image',
@@ -14,7 +20,35 @@ const makeFakeAddSurvey = (): AddSurveyParams => ({
   date: new Date()
 })
 
-let surveyCollection: Collection
+const mockAccount = async (): Promise<AccountModel> => {
+  const res = await accountCollection.insertOne(mockAddAccountParams())
+  return MongoHelper.map(res.ops[0])
+}
+
+const addSurveysModel = (): AddSurvey.Params[] => [
+  {
+    question: 'any_question',
+    answers: [{
+      image: 'any_image',
+      answer: 'any_answer'
+    },
+    {
+      answer: 'other_answer'
+    }],
+    date: new Date()
+  },
+  {
+    question: 'any_question2',
+    answers: [{
+      image: 'any_image2',
+      answer: 'any_answer2'
+    },
+    {
+      answer: 'other_answer2'
+    }],
+    date: new Date()
+  }
+]
 
 const makeSut = (): SurveyMongoRepository => {
   return new SurveyMongoRepository()
@@ -28,6 +62,10 @@ describe('Survey Mongo Repository', () => {
   beforeEach(async () => {
     surveyCollection = await MongoHelper.getCollection('surveys')
     await surveyCollection.deleteMany({})
+    surveyResultCollection = await MongoHelper.getCollection('surveyResult')
+    await surveyResultCollection.deleteMany({})
+    accountCollection = await MongoHelper.getCollection('account')
+    await accountCollection.deleteMany({})
   })
 
   afterAll(async () => {
@@ -45,32 +83,17 @@ describe('Survey Mongo Repository', () => {
 
   describe('loadAll()', () => {
     test('Should return all surveys on success', async () => {
-      await surveyCollection.insertMany([
-        {
-          question: 'any_question',
-          answers: [{
-            image: 'any_image',
-            answer: 'any_answer'
-          },
-          {
-            answer: 'other_answer'
-          }],
-          date: new Date()
-        },
-        {
-          question: 'any_question2',
-          answers: [{
-            image: 'any_image2',
-            answer: 'any_answer2'
-          },
-          {
-            answer: 'other_answer2'
-          }],
-          date: new Date()
-        }
-      ])
+      const account = await mockAccount()
+      const result = await surveyCollection.insertMany(addSurveysModel())
+      const survey = result.ops[0]
+      await surveyResultCollection.insertOne({
+        surveyId: survey._id,
+        accountId: account.id,
+        answer: survey.answers[0].answer,
+        date: new Date()
+      })
       const sut = makeSut()
-      const surveys = await sut.load()
+      const surveys = await sut.loadAll(account.id)
       expect(surveys.length).toBe(2)
       expect(surveys[0].id).toBeTruthy()
       expect(surveys[0].question).toEqual('any_question')
@@ -78,8 +101,9 @@ describe('Survey Mongo Repository', () => {
     })
 
     test('Should return empty list', async () => {
+      const account = await mockAccount()
       const sut = makeSut()
-      const surveys = await sut.load()
+      const surveys = await sut.loadAll(account.id)
       expect(surveys.length).toBe(0)
     })
   })

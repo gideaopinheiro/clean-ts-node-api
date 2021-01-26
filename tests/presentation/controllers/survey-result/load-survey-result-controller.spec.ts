@@ -3,15 +3,13 @@ import { LoadSurveyById } from '@/domain/usecases/survey'
 import { LoadSurveyResultController } from '@/presentation/controllers/survey-result/load-survey-result-controller'
 import { InvalidParamError } from '@/presentation/errors'
 import { forbidden, ok, serverError } from '@/presentation/helpers/http/http-helper'
-import { HttpRequest } from '@/presentation/protocols'
 import { mockLoadSurveyById, mockLoadSurveyResult } from '../../mocks/mock-survey-result'
 import { mockSurveyResult } from '@/tests/domain/mocks'
 import MockDate from 'mockdate'
 
-const mockRequest = (): HttpRequest => ({
-  params: {
-    surveyId: 'any_id'
-  }
+const mockRequest = (): any => ({
+  accountId: 'any_account_id',
+  surveyId: 'any_id'
 })
 
 type SutTypes = {
@@ -61,11 +59,11 @@ describe('LoadSurveyResult Controller', () => {
     expect(httpResponse).toEqual(serverError(new Error()))
   })
 
-  test('Should call LoadSurveyResult with correct value', async () => {
+  test('Should call LoadSurveyResult with correct values', async () => {
     const { sut, loadSurveyResultStub } = makeSut()
     const loadSpy = jest.spyOn(loadSurveyResultStub, 'load')
     await sut.handle(mockRequest())
-    expect(loadSpy).toHaveBeenCalledWith('any_id')
+    expect(loadSpy).toHaveBeenCalledWith('any_id', 'any_account_id')
   })
 
   test('Should return 500 if LoadSurveyResult throws', async () => {

@@ -1,10 +1,11 @@
 import { AccountModel } from '@/domain/models'
-import { AddAccount, Authentication, AuthenticationParams, AddAccountParams } from '@/domain/usecases/account'
+import { AddAccount, AddAccountParams, Authentication, AuthenticationParams } from '@/domain/usecases/account'
+import { SignUpController } from '@/presentation/controllers/login/signup-controller'
 import { EmailAlreadyInUseError, MissingParamError, ServerError } from '@/presentation/errors'
 import { badRequest, forbidden, ok, serverError } from '@/presentation/helpers/http/http-helper'
+import { EmailValidator, Validation } from '@/presentation/protocols'
 import { mockAccountModel } from '@/tests/domain/mocks'
-import { SignUpController } from '@/presentation/controllers/login/signup-controller'
-import { EmailValidator, Validation, HttpRequest } from '@/presentation/protocols'
+import { AuthenticationModel } from '@/domain/models/authentication'
 
 type SutTypes = {
   sut: SignUpController
@@ -14,13 +15,11 @@ type SutTypes = {
   authenticationStub: Authentication
 }
 
-const makeFakeRequest = (): HttpRequest => ({
-  body: {
-    name: 'any_name',
-    email: 'any_email@mail.com',
-    password: 'any_password',
-    passwordConfirmation: 'any_password'
-  }
+const makeFakeRequest = (): SignUpController.Request => ({
+  name: 'any_name',
+  email: 'any_email@mail.com',
+  password: 'any_password',
+  passwordConfirmation: 'any_password'
 })
 
 const makeEmailValidator = (): EmailValidator => {
@@ -52,8 +51,8 @@ const makeValidation = (): Validation => {
 
 const makeAuthenticationStub = (): Authentication => {
   class AuthenticationStub implements Authentication {
-    async auth (authentication: AuthenticationParams): Promise<string> {
-      return Promise.resolve('any_token')
+    async auth (authentication: AuthenticationParams): Promise<AuthenticationModel> {
+      return Promise.resolve({ name: 'any_name', accessToken: 'any_token' })
     }
   }
   return new AuthenticationStub()
@@ -105,7 +104,7 @@ describe('Signup Controller', () => {
   test('should return 200 if valid data is provided', async () => {
     const { sut } = makeSut()
     const httpResponse = await sut.handle(makeFakeRequest())
-    expect(httpResponse).toEqual(ok({ accessToken: 'any_token' }))
+    expect(httpResponse).toEqual(ok({ authenticationModel: { name: 'any_name', accessToken: 'any_token' } }))
   })
 
   test('Should call Validation with correct values', async () => {
@@ -113,7 +112,7 @@ describe('Signup Controller', () => {
     const validateSpy = jest.spyOn(validationStub, 'validate')
     const httpRequest = makeFakeRequest()
     await sut.handle(httpRequest)
-    expect(validateSpy).toHaveBeenCalledWith(httpRequest.body)
+    expect(validateSpy).toHaveBeenCalledWith(httpRequest)
   })
 
   test('Should return 400 if Validator throws', async () => {
@@ -143,6 +142,6 @@ describe('Signup Controller', () => {
   test('Should return 200 if authentication succeeds', async () => {
     const { sut } = makeSut()
     const httpResponse = await sut.handle(makeFakeRequest())
-    expect(httpResponse).toEqual(ok({ accessToken: 'any_token' }))
+    expect(httpResponse).toEqual(ok({ authenticationModel: { name: 'any_name', accessToken: 'any_token' } }))
   })
 })
