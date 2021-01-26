@@ -39,6 +39,8 @@ const makeFakeSurveys = (): SurveyModel[] => {
   ]
 }
 
+const mockRequest = (): LoadSurveysController.Request => ({ accountId: 'any_account_id' })
+
 const makeLoadSurveys = (): LoadSurveys => {
   class LoadSurveysStub implements LoadSurveys {
     async loadAll (accountId: string): Promise<LoadSurveysRepository.Result> {
@@ -69,6 +71,14 @@ describe('LoadSurveys Controller', () => {
 
   afterAll(() => {
     MockDate.reset()
+  })
+
+  test('Should call LoadSurveys with correct value', async () => {
+    const { sut, loadSurveysStub } = makeSut()
+    const loadAllSpy = jest.spyOn(loadSurveysStub, 'loadAll')
+    const httpRequest = mockRequest()
+    await sut.handle(httpRequest)
+    expect(loadAllSpy).toHaveBeenCalledWith('any_account_id')
   })
 
   test('Should call LoadSurveys', async () => {
