@@ -1,5 +1,5 @@
 import { AccountModel } from '@/domain/models'
-import { AddAccount, AddAccountParams, Authentication, AuthenticationParams } from '@/domain/usecases/account'
+import { AddAccount, Authentication, AuthenticationParams } from '@/domain/usecases/account'
 import { SignUpController } from '@/presentation/controllers/login/signup-controller'
 import { EmailAlreadyInUseError, MissingParamError, ServerError } from '@/presentation/errors'
 import { badRequest, forbidden, ok, serverError } from '@/presentation/helpers/http/http-helper'
@@ -33,7 +33,7 @@ const makeEmailValidator = (): EmailValidator => {
 
 const makeAddAccount = (): AddAccount => {
   class AddAccountStub implements AddAccount {
-    async add (account: AddAccountParams): Promise<AccountModel> {
+    async add (account: AddAccount.Params): Promise<AccountModel> {
       return new Promise(resolve => resolve(mockAccountModel()))
     }
   }

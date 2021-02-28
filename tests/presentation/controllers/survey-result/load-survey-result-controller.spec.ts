@@ -7,7 +7,7 @@ import { mockLoadSurveyById, mockLoadSurveyResult } from '../../mocks/mock-surve
 import { mockSurveyResult } from '@/tests/domain/mocks'
 import MockDate from 'mockdate'
 
-const mockRequest = (): any => ({
+const mockRequest = (): LoadSurveyResultController.Request => ({
   accountId: 'any_account_id',
   surveyId: 'any_id'
 })

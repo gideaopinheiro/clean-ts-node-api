@@ -1,12 +1,13 @@
 import { LogErrorRepository } from '@/data/protocols/db/log'
-import { ok, serverError } from '@/presentation/helpers/http/http-helper'
-import { Controller, HttpRequest, HttpResponse } from '@/presentation/protocols'
 import { LogControllerDecorator } from '@/main/decorators/log-controller-decorator'
-import { mockLogErrorRepository } from '../../data/mocks'
+import { ok, serverError } from '@/presentation/helpers/http/http-helper'
+import { Controller, HttpResponse } from '@/presentation/protocols'
+import { mockLogErrorRepository } from '@/tests/data/mocks'
+import { SignUpController } from '@/presentation/controllers/login/signup-controller'
 
 const mockController = (): Controller => {
   class ControllerStub implements Controller {
-    async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
+    async handle (request: any): Promise<HttpResponse> {
       return Promise.resolve(ok(mockAccount()))
     }
   }
@@ -19,13 +20,11 @@ const mockServerError = (): HttpResponse => {
   return serverError(fakeError)
 }
 
-const mockAccount = (): HttpRequest => ({
-  body: {
-    name: 'any_name',
-    email: 'any_email@mail.com',
-    password: 'any_password',
-    passwordConfirmation: 'any_password'
-  }
+const mockAccount = (): SignUpController.Request => ({
+  name: 'any_name',
+  email: 'any_email@mail.com',
+  password: 'any_password',
+  passwordConfirmation: 'any_password'
 })
 
 type SutTypes = {
